@@ -1,13 +1,40 @@
 % Problem statement in LaTeX
 
-\problemname{< TITLE OF PROBLEM>}
+\problemname{Exoplanetary Rover SLAM}
 
-% Brief description
+Several autonomous planetary exploration rovers are mapping a subterranean cave system on exoplanet \texttt{Kepler-16b}.
+They use a complex mapping algorithm, tracking exactly $N$ distinct geological landmarks.
+The data for these landmarks is stored in a massive $N \times N$ state transition matrix.
+
+Because the cave is subject to intense magnetic interference, the rovers' memory is prone to corruption.
+Over the last four seconds, each rover has logged four sequential transition matrices: $A$, $B$, $C$, and $D$.
+The navigation module has just output a final state matrix $E$, representing a rover's predicted environment for the next movement phase.
+
+Before the rovers fire their thrusters to move, they must verify that the final state $E$ is mathematically sound, 
+otherwise one of them may risk crashing into the cave walls.
+Specifically, it must be guaranteed that the sequential application of the four transitions equals the final state:
+$$A \times B \times C \times D = E$$
+
+Because transmitting millions of matrix elements across the communication relay is too slow and unpredictable,
+each rover transmits only the \texttt{seeds} used to generate their respective matrices.
+You, as ground control crew, must use a Pseudo-Random Number Generator (PRNG) to reconstruct the full matrices locally.
+
+\subsection*{Matrix Generation Specification}
+
+To reconstruct the matrices, use the following \textcolor{red}{some generator if we find any}:
+$$M_{ij}=\textit{\textcolor{red}{matrix generation equation here}}$$
+
+For a given matrix with seed $S$, fill the matrix by iterating through the rows ($0$ to $N-1$) and columns ($0$ to $N-1$) in standard row-major order.
+For each element update $X_{ij}$ using the above formula.
 
 \section*{Input}
 
-% Explain input format, what is expected.
+The input consists of a line containing the number of rovers as test cases: $R$,
+and for each test case a line containing six space-separated integers: $N$, $S_A$, $S_B$, $S_C$, $S_D$, and $S_E$. $N$ ($1 \le N \le 500$)
+representing the dimensions of the $N \times N$ matrices.
+The values $S_A, S_B, S_C, S_D,$ and $S_E$ ($0 \le S \le 10^9\textbf{\textcolor{red}{?}}$) represent the initial PRNG seeds for matrices $A, B, C, D,$ and $E$ respectively.
 
 \section*{Output}
 
-% Explain what the output should be
+Output a single line containing \texttt{YES} if most cases of $A \times B \times C \times D = E$. Otherwise, output \texttt{NO}.
+\textcolor{red}{still to be validated how we handle this}
