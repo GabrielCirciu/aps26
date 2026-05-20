@@ -31,8 +31,11 @@ For each element update $X_{ij}$ using the above formula.
 \section*{Input}
 
 The first line contains an integer $N$ - the dimension of the square matrices.
+
 The second line contains an integer $M$ - the number of generated matrices in the multiplication chain.
+
 The next $M$ lines each contain a single integer - $S_i$, representing the seed used to generate matrix $M_i$.
+
 The following $N$ lines describe the target matrix $E$. Each of these lines contains $N$ space-separated integers representing one row of the matrix.
 
 The input format can be summarized as:
@@ -57,5 +60,5 @@ EN1 EN2 ... ENN
 
 \section*{Output}
 
-Output a single line containing \texttt{YES} if most cases of $A \times B \times C \times D = E$. Otherwise, output \texttt{NO}.
+Output a single line containing \texttt{YES} if most cases of $M_1 \times M_2 \times \cdots \times M_M = E$. Otherwise, output \texttt{NO}.
 \textcolor{red}{still to be validated how we handle this}
