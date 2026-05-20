@@ -30,16 +30,14 @@ For each element update $X_{ij}$ using the above formula.
 
 \section*{Input}
 
-The first line contains an integer $N$ - the dimension of the square matrices.
-
-The second line contains an integer $M$ - the number of generated matrices in the multiplication chain.
-
-The next $M$ lines each contain a single integer - $S_i$, representing the seed used to generate matrix $M_i$.
-
-The following $N$ lines describe the target matrix $E$. Each of these lines contains $N$ space-separated integers representing one row of the matrix.
+\begin{itemize}
+\item The first line contains an integer $N$ --- the dimension of the square matrices.
+\item The second line contains an integer $M$ --- the number of generated matrices in the multiplication chain.
+\item The next $M$ lines each contain a single integer $S_i$, representing the seed used to generate matrix $M_i$.
+\item The following $N$ lines describe the target matrix $E$. Each line contains $N$ space-separated integers representing one row of the matrix.
+\end{itemize}
 
 The input format can be summarized as:
-
 \begin{verbatim}
 N
 M
