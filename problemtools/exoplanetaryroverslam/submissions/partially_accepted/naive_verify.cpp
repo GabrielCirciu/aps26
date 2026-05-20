@@ -19,11 +19,12 @@ vector<vector<long long>> generate_matrix(int n, long long seed) {
 vector<vector<long long>> multiply_matrices(const vector<vector<long long>>& m1, const vector<vector<long long>>& m2, int n) {
     vector<vector<long long>> res(n, vector<long long>(n, 0));
     for (int i = 0; i < n; ++i) {
-        for (int k = 0; k < n; ++k) {
-            long long m1_ik = m1[i][k];
-            for (int j = 0; j < n; ++j) {
-                res[i][j] = (res[i][j] + m1_ik * m2[k][j]) % MOD;
+        for (int j = 0; j < n; ++j) {
+            long long sum = 0;
+            for (int k = 0; k < n; ++k) {
+                sum = (sum + m1[i][k] * m2[k][j]) % MOD;
             }
+            res[i][j] = sum;
         }
     }
     return res;

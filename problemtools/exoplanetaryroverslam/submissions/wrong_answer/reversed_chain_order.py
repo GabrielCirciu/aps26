@@ -6,19 +6,16 @@ MOD = 1000000007
 def generate_matrix(n, seed):
     matrix = [[0] * n for _ in range(n)]
     for i in range(n):
-        i_term = i * 7
-        row = matrix[i]
         for j in range(n):
-            row[j] = (seed * 42 + i_term + j * 3) % 100
+            matrix[i][j] = (seed * 42 + i * 7 + j * 3) % 100
     return matrix
 
 def multiply_matrix_vector(matrix, vector, n):
     result = [0] * n
     for i in range(n):
-        row = matrix[i]
         s = 0
         for j in range(n):
-            s += row[j] * vector[j]
+            s += matrix[i][j] * vector[j]
         result[i] = s % MOD
     return result
 
@@ -41,9 +38,8 @@ def solve():
     # Read the target matrix E and reduce modulo MOD on read
     E = [[0] * n for _ in range(n)]
     for i in range(n):
-        row = E[i]
         for j in range(n):
-            row[j] = int(input_data[ptr]) % MOD
+            E[i][j] = int(input_data[ptr]) % MOD
             ptr += 1
             
     # Generate the chain matrices M_1 to M_m
