@@ -1,24 +1,9 @@
 import sys
 import random
 
+A = 911382323
+C = 972663749
 MOD = 1000000007
-
-"""Regular"""
-def generate_matrix(n, seed):
-    matrix = [[0] * n for _ in range(n)]
-    for i in range(n):
-        for j in range(n):
-            matrix[i][j] = (seed * 42 + i * 7 + j * 3) % 100
-    return matrix
-
-def multiply_matrix_vector(matrix, vector, n):
-    result = [0] * n
-    for i in range(n):
-        s = 0
-        for j in range(n):
-            s += matrix[i][j] * vector[j]
-        result[i] = s % MOD
-    return result
 
 """JIT optimized
 def generate_matrix(n, seed):
@@ -41,6 +26,17 @@ def multiply_matrix_vector(matrix, vector, n):
     return result
 """
 
+"""Regular"""
+def multiply_matrix_vector(matrix, vector, n):
+    result = [0] * n
+    for i in range(n):
+        row = matrix[i]
+        s = 0
+        for j in range(n):
+            s += row[j] * vector[j]
+        result[i] = s % MOD
+    return result
+
 def solve():
     # Fast I/O: Read all inputs from stdin at once
     input_data = sys.stdin.read().split()
@@ -61,14 +57,11 @@ def solve():
     E = [[0] * n for _ in range(n)]
     for i in range(n):
         for j in range(n):
-            E[i][j] = int(input_data[ptr]) % MOD
+            E[i][j] = int(input_data[ptr])
             ptr += 1
-            
-    # Generate the chain matrices M_1 to M_m
-    matrices = [generate_matrix(n, s) for s in seeds]
     
     # Run Freivalds' Algorithm
-    k_rounds = 5
+    k_rounds = 10
     is_equal = True
     
     for _ in range(k_rounds):
@@ -80,8 +73,18 @@ def solve():
         
         # 2. Compute M_1 * (M_2 * ... * (M_m * r)...) from right to left
         curr = r
-        for M_mat in reversed(matrices):
-            curr = multiply_matrix_vector(M_mat, curr, n)
+        for seed in reversed(seeds):
+            x = seed % MOD
+            result = [0] * n
+
+            for i in range(n):
+                s = 0
+                for j in range(n):
+                    x = (A * x + C) % MOD
+                    s += x * curr[j]
+                result[i] = s % MOD
+
+            curr = result
             
         # 3. Compare vectors
         if Er != curr:
