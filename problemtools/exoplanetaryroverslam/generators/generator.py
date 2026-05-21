@@ -3,7 +3,7 @@ import sys
 
 A_LCG = 911382323
 C_LCG = 972663749
-MOD = 1000000007
+MOD = 10007
 
 def generate_matrix(n, seed):
     x = seed % MOD
@@ -69,8 +69,8 @@ if __name__ == "__main__":
 
     input_data, answer = generate_test(n, m, correct)
 
-    with open(f"{path}/{name}.in", "w") as f:
+    with open(f"{path}/{name}.in", "w", newline='\n') as f:
         f.write(input_data + "\n")
 
-    with open(f"{path}/{name}.ans", "w") as f:
+    with open(f"{path}/{name}.ans", "w", newline='\n') as f:
         f.write(answer + "\n")

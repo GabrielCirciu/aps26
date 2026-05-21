@@ -3,7 +3,7 @@ import random
 
 A = 911382323
 C = 972663749
-MOD = 1000000007
+MOD = 10007
 
 """JIT optimized
 def generate_matrix(n, seed):

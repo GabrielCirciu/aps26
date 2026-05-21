@@ -1,7 +1,7 @@
 import sys
 import re
 
-MOD = 1000000007
+MOD = 10007
 
 def validate():
     lines = sys.stdin.readlines()

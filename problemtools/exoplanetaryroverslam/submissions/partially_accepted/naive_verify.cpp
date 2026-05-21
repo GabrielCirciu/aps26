@@ -3,7 +3,7 @@
 
 using namespace std;
 
-const long long MOD = 1000000007;
+const long long MOD = 10007;
 const long long A_LCG = 911382323;
 const long long C_LCG = 972663749;
 
