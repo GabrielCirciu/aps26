@@ -20,3 +20,4 @@ def dp(numbers, n, k):
 
 n, k = map(int, input().split())
 numbers = list(map(int, input().split()))
+print((dp(numbers, n, k)))
