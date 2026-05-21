@@ -21,7 +21,7 @@ def multiply_matrices(A, B, n):
     return C
 
 def generate_test(n, m, correct):
-    seeds = [random.randint(1, 10**9) for _ in range(m)]
+    seeds = random.sample(range(1, 10**9 + 1), m)
     matrices = [generate_matrix(n, s) for s in seeds]
 
     E = matrices[0]
@@ -44,8 +44,6 @@ def generate_test(n, m, correct):
     return "\n".join(input_lines), answer
 
 if __name__ == "__main__":
-    # Usage: python3 generators/generator.py <name> <n> <m> <yes|no> <path> [seed] 
-    # python3 generators/generator.py 2 2 2 no data/secret/group2 42
     name = sys.argv[1]
     n = int(sys.argv[2])
     m = int(sys.argv[3])

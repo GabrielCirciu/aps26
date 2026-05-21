@@ -23,10 +23,11 @@ $$M_{ij} = (S \cdot 42 + i \cdot 7 + j \cdot 3) \bmod 100$$
 
 \section*{Input}
 
-The first line contains an integer $ 1 \leq N \leq 400$, the matrix dimension. The second line contains
+The first line contains an integer $1 \leq N \leq 400$, the matrix dimension. The second line contains
 an integer $1 \leq M \leq 60$, the number of transition matrices. The following $M$ lines each contain
-a single integer $ 1 \leq S_i \leq 10^9$, the seed for matrix $M_i$. The final $N$ lines each contain $N$
-space-separated integers describing the current map state matrix $E$.
+a single integer $1 \leq S_i \leq 10^9$, the seed for matrix $M_i$. It is guaranteed that $S_i \neq S_j$
+for all $i \neq j$. The final $N$ lines each contain $N$ space-separated integers describing the
+current map state matrix $E$.
 
 \section*{Output}
 
