@@ -41,7 +41,7 @@ license: cc by-sa
 # Override standard limits: say that the TLE solutions provided should be at least 4 times above the time limit in order for us to be happy.
 limits:
   time_multiplier: 2
-  time_safety_margin: 0.1           # (default is 2)
+  time_safety_margin: 1           # (default is 2)
   memory: 1024                    # MB
 #  output: 8                      # MB
 #  compilation_time: 60           # seconds
