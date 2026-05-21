@@ -1,62 +1,33 @@
-% Problem statement in LaTeX
-
 \problemname{Exoplanetary Rover SLAM}
 
-Several autonomous planetary exploration rovers are mapping a subterranean cave system on exoplanet \texttt{Kepler-16b}.
-They use a complex mapping algorithm, tracking exactly $N$ distinct geological landmarks.
-The data for these landmarks is stored in a massive $N \times N$ state transition matrix.
+A fleet of autonomous rovers is exploring a subterranean cave system on exoplanet Kepler-16b.
+Each rover runs a SLAM (Simultaneous Localisation and Mapping) algorithm tracking $N$ distinct
+geological landmarks, maintained in an $N \times N$ state transition matrix.
 
-Because the cave is subject to intense magnetic interference, the rovers' memory is prone to corruption.
-%Over the last four seconds, each rover has logged four sequential transition matrices: $A$, $B$, $C$, and $D$.
-Over the last phase of exploration, each rover has logged a sequence of M transition matrices: $M_1$, $M_2$, …, $M_M$.
-The navigation module has just output a final state matrix $E$, claimed to represent the result of applying all transition matrices in sequence. % representing a rover's predicted environment for the next movement phase.
+During the latest exploration phase, each rover recorded $M$ sequential state transitions
+$M_1, M_2, \ldots, M_M$, capturing how the map evolved step by step. The navigation module,
+which is prone to memory corruption from the cave's intense magnetic interference, has produced
+a matrix $E$ representing its current belief of the map state after applying all transitions in
+sequence. The rovers use $E$ to plan their next move and if it is wrong, they are navigating on
+a corrupted map and risk driving straight into a cave wall.
 
-Before the rovers fire their thrusters to move, they must verify that the final state $E$ is mathematically sound, 
-otherwise one of them may risk crashing into the cave walls.
-Specifically, it must be guaranteed that the sequential application of all transitions equals the final state:
-$$M_1 \times M_2 \times \cdots \times M_M = E$$
+Before giving the rovers the green light, you must verify from ground control that $E$ truly
+equals $M_1 \times M_2 \times \cdots \times M_M$. Every second the rovers sit idle drains
+their battery, so you need an answer fast.
 
-Because transmitting millions of matrix elements across the communication relay is too slow and unpredictable,
-each rover transmits only the \texttt{seeds} values used to generate their respective matrices.
-You, as ground control crew, must use a Pseudo-Random Number Generator (PRNG) to reconstruct the full matrices locally.
-
-\subsection*{Matrix Generation Specification}
-
-To reconstruct the matrices, use the following \textcolor{red}{some generator if we find any}:
-$$M_{ij}=\textit{\textcolor{red}{matrix generation equation here}}$$
-
-For a given matrix with seed $S$, fill the matrix by iterating through the rows ($0$ to $N-1$) and columns ($0$ to $N-1$) in standard row-major order.
-For each element update $X_{ij}$ using the above formula.
+Transmitting full matrices is too slow, so each rover instead transmits only the seed used to 
+generate each transition matrix. You reconstruct them locally
+using a shared PRNG: given seed $S$, the entries are filled in row-major order with rows and
+columns indexed from $0$ using:
+$$M_{ij} = (S \cdot 42 + i \cdot 7 + j \cdot 3) \bmod 100$$
 
 \section*{Input}
 
-\begin{itemize}
-\item The first line contains an integer $N$ --- the dimension of the square matrices.
-\item The second line contains an integer $M$ --- the number of generated matrices in the multiplication chain.
-\item The next $M$ lines each contain a single integer $S_i$, representing the seed used to generate matrix $M_i$.
-\item The following $N$ lines describe the target matrix $E$. Each line contains $N$ space-separated integers representing one row of the matrix.
-\end{itemize}
-
-The input format can be summarized as:
-\begin{verbatim}
-N
-M
-seed1
-seed2
-...
-seedM
-E11 E12 ... E1N
-E21 E22 ... E2N
-...
-EN1 EN2 ... ENN
-\end{verbatim}
-
-% The input consists of a line containing the number of rovers as test cases: $R$,
-% and for each test case a line containing six space-separated integers: $N$, $S_A$, $S_B$, $S_C$, $S_D$, and $S_E$. $N$ ($1 \le N \le 500$)
-% representing the dimensions of the $N \times N$ matrices.
-% The values $S_A, S_B, S_C, S_D,$ and $S_E$ ($0 \le S \le 10^9\textbf{\textcolor{red}{?}}$) represent the initial PRNG seeds for matrices $A, B, C, D,$ and $E$ respectively.
+The first line contains an integer $ 1 \leq N \leq 400$, the matrix dimension. The second line contains
+an integer $1 \leq M \leq 60$, the number of transition matrices. The following $M$ lines each contain
+a single integer $ 1 \leq S_i \leq 10^9$, the seed for matrix $M_i$. The final $N$ lines each contain $N$
+space-separated integers describing the current map state matrix $E$.
 
 \section*{Output}
 
-Output a single line containing \texttt{YES} if most cases of $M_1 \times M_2 \times \cdots \times M_M = E$. Otherwise, output \texttt{NO}.
-\textcolor{red}{still to be validated how we handle this}
+Output \texttt{YES} if the rovers can safely advance, otherwise output \texttt{NO}.
