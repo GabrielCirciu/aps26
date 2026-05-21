@@ -1,22 +1,31 @@
 import sys
 
 MOD = 1000000007
+A_LCG = 911382323
+C_LCG = 972663749
 
 def generate_matrix(n, seed):
+    x = seed % MOD
     matrix = [[0] * n for _ in range(n)]
+
     for i in range(n):
         for j in range(n):
-            matrix[i][j] = (seed * 42 + i * 7 + j * 3) % 100
+            x = (A_LCG * x + C_LCG) % MOD
+            matrix[i][j] = x
+
     return matrix
 
 def multiply_matrices(A, B, n):
     result = [[0] * n for _ in range(n)]
+
     for i in range(n):
         for j in range(n):
-            if A[i][j] == 0:
+            aij = A[i][j]
+            if aij == 0:
                 continue
             for k in range(n):
-                result[i][k] = (result[i][k] + A[i][j] * B[j][k]) % MOD
+                result[i][k] = (result[i][k] + aij * B[j][k]) % MOD
+
     return result
 
 def solve():
@@ -27,6 +36,7 @@ def solve():
     ptr = 0
     n = int(input_data[ptr])
     ptr += 1
+
     m = int(input_data[ptr])
     ptr += 1
 
@@ -36,19 +46,16 @@ def solve():
     E = [[0] * n for _ in range(n)]
     for i in range(n):
         for j in range(n):
-            E[i][j] = int(input_data[ptr]) % MOD
+            E[i][j] = int(input_data[ptr])
             ptr += 1
 
-    matrices = [generate_matrix(n, s) for s in seeds]
+    prod = generate_matrix(n, seeds[0])
 
-    prod = matrices[0]
-    for mat in matrices[1:]:
+    for seed in seeds[1:]:
+        mat = generate_matrix(n, seed)
         prod = multiply_matrices(prod, mat, n)
 
-    if prod == E:
-        print("YES")
-    else:
-        print("NO")
+    print("YES" if prod == E else "NO")
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     solve()
