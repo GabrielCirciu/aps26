@@ -2,32 +2,47 @@
 
 A fleet of autonomous rovers is exploring a subterranean cave system on exoplanet Kepler-16b.
 Each rover runs a SLAM (Simultaneous Localisation and Mapping) algorithm tracking $N$ distinct
-geological landmarks, maintained in an $N \times N$ state transition matrix.
-
-During the latest exploration phase, each rover recorded $M$ sequential state transitions
+geological landmarks, maintained in an $N \times N$ state transition matrix. During the latest exploration phase, each rover recorded $M$ sequential state transitions
 $M_1, M_2, \ldots, M_M$, capturing how the map evolved step by step. The navigation module,
 which is prone to memory corruption from the cave's intense magnetic interference, has produced
 a matrix $E$ representing its current belief of the map state after applying all transitions in
 sequence. The rovers use $E$ to plan their next move and if it is wrong, they are navigating on
 a corrupted map and risk driving straight into a cave wall.
 
-Before giving the rovers the green light, you must verify from ground control that $E$ truly
-equals $M_1 \times M_2 \times \cdots \times M_M$. Every second the rovers sit idle drains
-their battery, so you need an answer fast.
+To avoid overflow in the processors of the rover, all matrix computations are performed modulo
+\[
+P = 10007.
+\]
 
-Transmitting full matrices is too slow, so each rover instead transmits only the seed used to 
-generate each transition matrix. You reconstruct them locally
-using a shared PRNG: given seed $S$, the entries are filled in row-major order with rows and
-columns indexed from $0$ using:
-$$M_{ij} = (S \cdot 42 + i \cdot 7 + j \cdot 3) \bmod 100$$
+Before giving the rovers the green light, you must verify from ground control that
+\[
+E \equiv M_1 \times M_2 \times \cdots \times M_M \pmod P.
+\]
+
+Every second the rovers sit idle drains their battery, so you need an answer fast. Transmitting full matrices is too slow, so each rover instead transmits only the seed used to generate each transition matrix. You reconstruct them locally using a shared PRNG. Given a seed $S$, let $x = S$. The entries of the matrix are filled in row-major order with rows and columns indexed from $0$. For each entry:
+\[
+x = (911382323 \cdot x + 972663749) \bmod P
+\]
+\[
+M_{ij} = x
+\]
 
 \section*{Input}
 
-The first line contains an integer $ 1 \leq N \leq 400$, the matrix dimension. The second line contains
-an integer $1 \leq M \leq 60$, the number of transition matrices. The following $M$ lines each contain
-a single integer $ 1 \leq S_i \leq 10^9$, the seed for matrix $M_i$. The final $N$ lines each contain $N$
-space-separated integers describing the current map state matrix $E$.
+The first line contains an integer $1 \leq N \leq 400$, the matrix dimension. The second line contains an integer $1 \leq M \leq 60$, the number of transition matrices. The following $M$ lines each contain a single integer $1 \leq S_i \leq 10^9$, the seed for matrix $M_i$. It is guaranteed that $S_i \neq S_j$ for all $i \neq j$. The final $N$ lines each contain $N$ space-separated integers describing the current map state matrix $E$. Each entry satisfies $0 \leq E_{ij} < P.$
 
 \section*{Output}
 
 Output \texttt{YES} if the rovers can safely advance, otherwise output \texttt{NO}.
+
+\section*{Scoring}
+Your solution will be tested on a set of test groups, each worth a number of points.
+To get the points for a test group you need to solve all test cases in the test group.
+
+\noindent
+\begin{tabular}{| l | l | l |}
+  \hline
+  Group & Points & Constraints \\ \hline
+  $1$    & $20$         &  $N \leq 100$ and $M \leq 5$  \\ \hline
+  $2$    & $80$        &  No additional constraints \\ \hline
+\end{tabular}

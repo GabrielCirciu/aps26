@@ -1,63 +1,66 @@
 import random
 import sys
+import os
+import numpy as np
 
-MOD = 1000000007
+A_LCG = 911382323
+C_LCG = 972663749
+MOD = 10007
 
 def generate_matrix(n, seed):
-    matrix = [[0] * n for _ in range(n)]
-    for i in range(n):
-        for j in range(n):
-            matrix[i][j] = (seed * 42 + i * 7 + j * 3) % 100
-    return matrix
+    x = seed % MOD
+    values = np.empty(n * n, dtype=np.int64)
 
-def multiply_matrices(A, B, n):
-    C = [[0] * n for _ in range(n)]
-    for i in range(n):
-        for k in range(n):
-            if A[i][k] == 0:
-                continue
-            for j in range(n):
-                C[i][j] += A[i][k] * B[k][j]
-    return C
+    for idx in range(n * n):
+        x = (A_LCG * x + C_LCG) % MOD
+        values[idx] = x
+
+    return values.reshape((n, n))
+
+def multiply_matrices(A, B):
+    return (A @ B) % MOD
 
 def generate_test(n, m, correct):
-    seeds = [random.randint(1, 10**9) for _ in range(m)]
-    matrices = [generate_matrix(n, s) for s in seeds]
+    seeds = random.sample(range(1, 10**9 + 1), m)
 
-    E = matrices[0]
-    for i in range(1, m):
-        E = multiply_matrices(E, matrices[i], n)
+    E = generate_matrix(n, seeds[0])
+
+    for seed in seeds[1:]:
+        M = generate_matrix(n, seed)
+        E = multiply_matrices(E, M)
 
     if not correct:
-        ri, rj = random.randint(0, n-1), random.randint(0, n-1)
-        E[ri][rj] += random.randint(1, 100)
+        ri = random.randint(0, n - 1)
+        rj = random.randint(0, n - 1)
+        E[ri, rj] = (int(E[ri, rj]) + random.randint(1, 100)) % MOD
 
-    input_lines = []
-    input_lines.append(str(n))
-    input_lines.append(str(m))
-    for s in seeds:
-        input_lines.append(str(s))
-    for row in E:
-        input_lines.append(" ".join(map(str, row)))
+    input_lines = [str(n), str(m)]
+    input_lines.extend(map(str, seeds))
+
+    for i in range(n):
+        input_lines.append(" ".join(map(str, E[i])))
 
     answer = "YES" if correct else "NO"
     return "\n".join(input_lines), answer
 
+# run_ python3 generators/generator.py NAME N M yes OUTPUT_PATH SEED
+# example: python3 generators/generator.py no2 200 30 no data/secret/group2 2
 if __name__ == "__main__":
-    # Usage: python3 generators/generator.py <name> <n> <m> <yes|no> <path> [seed] 
-    # python3 generators/generator.py 2 2 2 no data/secret/group2 42
     name = sys.argv[1]
     n = int(sys.argv[2])
     m = int(sys.argv[3])
     correct = sys.argv[4].lower() == "yes"
     path = sys.argv[5]
+
     if len(sys.argv) > 6:
         random.seed(int(sys.argv[6]))
 
+    os.makedirs(path, exist_ok=True)
+
     input_data, answer = generate_test(n, m, correct)
 
-    with open(f"{path}/{name}.in", "w") as f:
+    with open(f"{path}/{name}.in", "w", newline="\n") as f:
         f.write(input_data + "\n")
 
-    with open(f"{path}/{name}.ans", "w") as f:
+    with open(f"{path}/{name}.ans", "w", newline="\n") as f:
         f.write(answer + "\n")
