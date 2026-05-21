@@ -2,7 +2,7 @@ import java.io.InputStream;
 import java.io.IOException;
 
 public class naive_verify {
-    private static final int MOD = 1000000007;
+    private static final int P = 10007;
 
     static class FastReader {
         private static final int BUFFER_SIZE = 1 << 16;
@@ -54,14 +54,13 @@ public class naive_verify {
         }
     }
 
-    public static int[][] generateMatrix(int n, int seed) {
+    public static int[][] generateMatrix(int n, long seed) {
         int[][] matrix = new int[n][n];
-        long seedL = seed;
+        long x = seed;
         for (int i = 0; i < n; i++) {
-            long iTerm = i * 7L;
-            int[] row = matrix[i];
             for (int j = 0; j < n; j++) {
-                row[j] = (int) ((seedL * 42 + iTerm + j * 3L) % 100);
+                x = (911382323L * x + 972663749L) % P;
+                matrix[i][j] = (int) x;
             }
         }
         return matrix;
@@ -78,7 +77,7 @@ public class naive_verify {
                 int[] rowB = B[j];
                 int[] rowRes = result[i];
                 for (int k = 0; k < n; k++) {
-                    rowRes[k] = (int) ((rowRes[k] + aVal * rowB[k]) % MOD);
+                    rowRes[k] = (int) ((rowRes[k] + aVal * rowB[k]) % P);
                 }
             }
         }
@@ -100,7 +99,7 @@ public class naive_verify {
             for (int i = 0; i < n; i++) {
                 for (int j = 0; j < n; j++) {
                     long val = reader.nextInt();
-                    E[i][j] = (int) ((val % MOD + MOD) % MOD);
+                    E[i][j] = (int) ((val % P + P) % P);
                 }
             }
 

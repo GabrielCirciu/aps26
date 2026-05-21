@@ -3,7 +3,7 @@ import java.io.IOException;
 import java.util.Random;
 
 public class frievalds_submit {
-    private static final int MOD = 1000000007;
+    private static final int P = 10007;
 
     static class FastReader {
         private static final int BUFFER_SIZE = 1 << 16;
@@ -55,14 +55,13 @@ public class frievalds_submit {
         }
     }
 
-    public static int[][] generateMatrix(int n, int seed) {
+    public static int[][] generateMatrix(int n, long seed) {
         int[][] matrix = new int[n][n];
-        long seedL = seed;
+        long x = seed;
         for (int i = 0; i < n; i++) {
-            long iTerm = i * 7L;
-            int[] row = matrix[i];
             for (int j = 0; j < n; j++) {
-                row[j] = (int) ((seedL * 42 + iTerm + j * 3L) % 100);
+                x = (911382323L * x + 972663749L) % P;
+                matrix[i][j] = (int) x;
             }
         }
         return matrix;
@@ -76,10 +75,10 @@ public class frievalds_submit {
             for (int j = 0; j < n; j++) {
                 s += (long) row[j] * vector[j];
                 if (s >= 8000000000000000000L) {
-                    s %= MOD;
+                    s %= P;
                 }
             }
-            result[i] = (int) (s % MOD);
+            result[i] = (int) (s % P);
         }
         return result;
     }
@@ -99,7 +98,7 @@ public class frievalds_submit {
             for (int i = 0; i < n; i++) {
                 for (int j = 0; j < n; j++) {
                     long val = reader.nextInt();
-                    E[i][j] = (int) ((val % MOD + MOD) % MOD);
+                    E[i][j] = (int) ((val % P + P) % P);
                 }
             }
 
