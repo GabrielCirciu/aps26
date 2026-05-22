@@ -5,28 +5,6 @@ A = 911382323
 C = 972663749
 MOD = 10007
 
-"""JIT optimized
-def generate_matrix(n, seed):
-    matrix = [[0] * n for _ in range(n)]
-    for i in range(n):
-        i_term = i * 7
-        row = matrix[i]
-        for j in range(n):
-            row[j] = (seed * 42 + i_term + j * 3) % 100
-    return matrix
-
-def multiply_matrix_vector(matrix, vector, n):
-    result = [0] * n
-    for i in range(n):
-        row = matrix[i]
-        s = 0
-        for j in range(n):
-            s += row[j] * vector[j]
-        result[i] = s % MOD
-    return result
-"""
-
-"""Regular"""
 def multiply_matrix_vector(matrix, vector, n):
     result = [0] * n
     for i in range(n):
